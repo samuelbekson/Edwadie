@@ -1,0 +1,71 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
+import ProductDetail from "./pages/ProductDetail";
+import CategoryPage from "./pages/CategoryPage";
+import Categories from "./pages/Categories";
+import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
+import Orders from "./pages/Orders";
+import SearchResults from "./pages/SearchResults";
+import SellerDashboard from "./pages/SellerDashboard";
+import SellProduct from "./pages/SellProduct";
+import SellingGuide from "./pages/SellingGuide";
+import Wishlist from "./pages/Wishlist";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ReturnPolicy from "./pages/ReturnPolicy";
+import Terms from "./pages/Terms";
+import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <CartProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order-success" element={<OrderSuccess />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/category/:id" element={<CategoryPage />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/search" element={<SearchResults />} />
+                <Route path="/seller-dashboard" element={<SellerDashboard />} />
+                <Route path="/sell" element={<SellProduct />} />
+                <Route path="/selling-guide" element={<SellingGuide />} />
+                <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/returns" element={<ReturnPolicy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          </BrowserRouter>
+        </TooltipProvider>
+      </CartProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
+
+export default App;
