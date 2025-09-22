@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
 import { products, formatCurrency } from "@/data/mockData";
 import ProductGrid from "@/components/products/ProductGrid";
-import { LazyImage } from "@/components/ui/LazyImage";
+import LazyImage from "@/components/LazyImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ProductJsonLd } from "@/components/seo/ProductJsonLd";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -18,23 +18,10 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const { isWishlisted, addToWishlist, removeFromWishlist } = useWishlist();
-  const wishlisted = isWishlisted(product.id);
-  const handleWishlist = () => {
-    if (wishlisted) {
-      removeFromWishlist(product.id);
-    } else {
-      addToWishlist(product.id);
-    }
-  };
-
+  
   // Find the product by ID
   const product = products.find(p => p.id === id);
   
-  // Get related products (same category, excluding current product)
-  const relatedProducts = products
-    .filter(p => product && p.category === product.category && p.id !== product.id)
-    .slice(0, 4);
-
   if (!product) {
     return (
       <div className="container py-12 text-center">
@@ -44,6 +31,21 @@ const ProductDetail = () => {
       </div>
     );
   }
+  
+  const wishlisted = isWishlisted(product.id);
+  const handleWishlist = () => {
+    if (wishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product.id);
+    }
+  };
+
+  // Get related products (same category, excluding current product)
+  const relatedProducts = products
+    .filter(p => product && p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
+
 
   const decreaseQuantity = () => {
     if (quantity > 1) {

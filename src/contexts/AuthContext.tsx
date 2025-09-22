@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase, handleSupabaseError } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import type { User, Session, AuthChangeEvent } from '@/types/supabase';
 
 interface AuthContextType {
@@ -121,7 +121,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Success handling (toast, redirect) is performed by the caller (e.g., Login page).
     } catch (error) {
       console.error('Login error:', error);
-      handleSupabaseError(error, 'login');
+      const message = error instanceof Error ? error.message : 'Login failed';
+      toast({
+        title: "Login Error",
+        description: message,
+        variant: "destructive",
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -157,7 +162,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error) {
       console.error('Signup error:', error);
-      handleSupabaseError(error, 'signup');
+      const message = error instanceof Error ? error.message : 'Signup failed';
+      toast({
+        title: "Signup Error", 
+        description: message,
+        variant: "destructive",
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -184,7 +194,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       navigate('/login');
     } catch (error) {
       console.error('Logout error:', error);
-      handleSupabaseError(error, 'logout');
+      const message = error instanceof Error ? error.message : 'Logout failed';
+      toast({
+        title: "Logout Error",
+        description: message,
+        variant: "destructive",
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -208,7 +223,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     } catch (error) {
       console.error('Password reset error:', error);
-      handleSupabaseError(error, 'resetPassword');
+      const message = error instanceof Error ? error.message : 'Password reset failed';
+      toast({
+        title: "Password Reset Error",
+        description: message,
+        variant: "destructive",
+      });
       throw error;
     } finally {
       setIsLoading(false);
@@ -240,7 +260,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     } catch (error) {
       console.error('Profile update error:', error);
-      handleSupabaseError(error, 'updateProfile');
+      const message = error instanceof Error ? error.message : 'Profile update failed';
+      toast({
+        title: "Profile Update Error",
+        description: message,
+        variant: "destructive",
+      });
       throw error;
     }
   };
