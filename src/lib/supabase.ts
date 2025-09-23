@@ -4,12 +4,17 @@ import { toast } from '@/components/ui/use-toast';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://yszjfczmqlsqumnewqrk.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzempmY3ptcWxzcXVtbmV3cXJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMjY0ODAsImV4cCI6MjA2NjgwMjQ4MH0.91RF1WgV45A9nGzzwB99reIbe4gffnfHgXpD3LU0VlA';
 
+// Validate environment variables
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Missing Supabase environment variables');
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined
   }
 });
 

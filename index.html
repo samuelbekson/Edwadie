@@ -22,10 +22,46 @@
     <meta name="twitter:description" content="Edwadie - Discover amazing deals on a wide range of products." />
     <meta name="twitter:site" content="@gbay" />
     <meta name="twitter:image" content="/favicon.ico" />
+    
+    <style>
+      /* Prevent flash of unstyled content */
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading spinner for initial load */
+      .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .initial-loading {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="initial-loading">
+        <div class="loading-spinner"></div>
+        <p style="margin-top: 20px; color: #666;">Loading Edwadie...</p>
+      </div>
+    </div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

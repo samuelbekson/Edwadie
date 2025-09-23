@@ -6,9 +6,12 @@ import DealsSection from "@/components/home/DealsSection";
 import TrendingSection from "@/components/home/TrendingSection";
 import ProductGrid from "@/components/products/ProductGrid";
 import { products } from "@/data/mockData";
+
 const Home = () => {
   const featuredProducts = products.filter(product => product.featured);
 
+  // Add error boundary for this component
+  try {
   return (
     <div className="min-h-screen">
       {/* Hero Banner */}
@@ -42,5 +45,17 @@ const Home = () => {
       </div>
     </div>
   );
+  } catch (error) {
+    console.error('Error rendering Home component:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Welcome to Edwadie</h1>
+          <p className="text-gray-600">Your premium marketplace is loading...</p>
+        </div>
+      </div>
+    );
+  }
 };
+
 export default Home;

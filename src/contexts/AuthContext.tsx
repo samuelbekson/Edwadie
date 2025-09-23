@@ -44,10 +44,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Handle auth state changes
   useEffect(() => {
+    let mounted = true;
+    
     // Get initial session
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event: AuthChangeEvent, session: Session | null) => {
         console.log('Auth state changed:', event);
+        
+        if (!mounted) return;
         
         if (session?.user) {
           // Get or create user profile
@@ -74,30 +78,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             userProfile = await fetchUserProfile(session.user.id);
           }
           
-          setUser(userProfile);
-          setSession(session);
+          if (mounted) {
+            setUser(userProfile);
+            setSession(session);
+          }
         } else {
-          setUser(null);
-          setSession(null);
+          if (mounted) {
+            setUser(null);
+            setSession(null);
+          }
         }
         
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     );
 
     // Check for existing session
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const userProfile = await fetchUserProfile(session.user.id);
-        setUser(userProfile);
-        setSession(session);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && mounted) {
+          const userProfile = await fetchUserProfile(session.user.id);
+          setUser(userProfile);
+          setSession(session);
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
-      setIsLoading(false);
     };
 
     checkSession();
+    
     return () => {
+      mounted = false;
       subscription?.unsubscribe();
     };
   }, [fetchUserProfile]);
